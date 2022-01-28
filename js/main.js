@@ -20,7 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         scene: {
             preload: preload,
-            create: create
+            create: create,
+            update: update
         }
     };
 
@@ -46,4 +47,21 @@ function create() {
 
     gameObject.player = this.physics.add.sprite(gameConstants.WIDTH / 2, gameConstants.HEIGHT - 10, 'playerBlack')
     gameObject.player.setCollideWorldBounds(true)
+
+    this.physics.add.collider(gameObject.player, gameObject.platforms)
+    gameObject.keys = this.input.keyboard.createCursorKeys()
+}
+
+function update() {
+    if (gameObject.keys.left.isDown) {
+        gameObject.player.setVelocityX(-200)
+    } else if (gameObject.keys.right.isDown) {
+        gameObject.player.setVelocityX(200)
+    } else {
+        gameObject.player.setVelocityX(0)
+    }
+
+    if (gameObject.keys.space.isDown && (gameObject.player.body.onFloor() || gameObject.player.body.touching.down)) {
+        gameObject.player.setVelocityY(-180)
+    }
 }
