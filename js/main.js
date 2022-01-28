@@ -64,4 +64,25 @@ function update() {
     if (gameObject.keys.space.isDown && (gameObject.player.body.onFloor() || gameObject.player.body.touching.down)) {
         gameObject.player.setVelocityY(-180)
     }
+
+    if (gameObject.player.y < gameConstants.HEIGHT / 2) {
+        gameObject.platforms.incY(1)
+
+        const disappearing = gameObject.platforms.getChildren().find(e => e.y > gameConstants.HEIGHT)
+
+        if (disappearing) {
+            gameObject.platforms.remove(disappearing, true, true)
+        }
+    }
+
+    if (!gameObject.platforms.getChildren().find(e => e.y < (gameConstants.HEIGHT / gameConstants.NUMBER_OF_PLATFORMS) * 1.5)) {
+        console.log(gameObject.platforms.getChildren().map(e => e.y))
+        const platform = Platform.createPlatform(0, gameConstants.WIDTH, (gameConstants.HEIGHT / gameConstants.NUMBER_OF_PLATFORMS) / 2)
+
+        gameObject.platforms.create(platform.position.x, platform.position.y, 'platformBlack')
+    }
+
+
+    gameObject.platforms.refresh()
+
 }
