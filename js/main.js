@@ -4,13 +4,14 @@ const gameObject = {}
 
 const gameConstants = {
     HEIGHT: 600,
-    WIDTH: 400,
-    NUMBER_OF_PLATFORMS: 10
+    WIDTH: 200,
+    NUMBER_OF_PLATFORMS: 10,
+    CHANGER_SPAWN_RATE: 0.2
 } 
 document.addEventListener("DOMContentLoaded", () => {
     var config = {
         type: Phaser.AUTO,
-        width: gameConstants.WIDTH,
+        width: gameConstants.WIDTH * 2,
         height: gameConstants.HEIGHT,
         physics: {
             default: 'arcade',
@@ -30,26 +31,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function preload() {
     this.load.image('platformBlack', '../img/platformBlack.png')
+    this.load.image('platformWhite', '../img/platformWhite.png')
     this.load.image('playerBlack', '../img/playerBlack.png')
+    this.load.image('playerWhite', '../img/playerWhite.png')
+    this.load.image('colorChanger', '../img/colorChanger.png')
 }
 
 function create() {
     gameObject.platforms = this.physics.add.staticGroup()
+
+    gameObject.colorChangers = this.physics.add.group()
 
     this.cameras.main.setBackgroundColor('#ffffff')
 
     const distanceBetweenPlatforms = gameConstants.HEIGHT / gameConstants.NUMBER_OF_PLATFORMS;
     for (let i = 0; i < gameConstants.HEIGHT; i += distanceBetweenPlatforms) {
         const platform = Platform.createPlatform(0, gameConstants.WIDTH, i + distanceBetweenPlatforms / 2)
-        
-        gameObject.platforms.create(platform.position.x, platform.position.y, 'platformBlack')
+
+        gameObject.platforms.create(platform.position.x, platform.position.y, Math.random() > 0.5 ? 'platformBlack' : 'platformWhite')
+        if (Math.random() < gameConstants.CHANGER_SPAWN_RATE) {
+            gameObject.colorChangers.create(platform.position.x, platform.position.y - 10, 'colorChanger')
+        }
     }
+
+    this.physics.add.collider(gameObject.colorChangers, gameObject.platforms)
 
     gameObject.player = this.physics.add.sprite(gameConstants.WIDTH / 2, gameConstants.HEIGHT - 10, 'playerBlack')
     gameObject.player.setCollideWorldBounds(true)
 
     this.physics.add.collider(gameObject.player, gameObject.platforms)
+
+    this.physics.add.collider(gameObject.player, gameObject.colorChangers, (player, colorChanger) => {
+        gameObject.colorChangers.remove(colorChanger, true, true)
+        player.setTexture(player.texture.key === 'playerBlack' ? 'playerWhite' : 'playerBlack')
+    })
+
     gameObject.keys = this.input.keyboard.createCursorKeys()
+
+    this.cameras.main.setSize(gameConstants.WIDTH, gameConstants.HEIGHT)
+    this.cameras.add(gameConstants.WIDTH, 0, gameConstants.WIDTH, gameConstants.HEIGHT)
+
 }
 
 function update() {
@@ -75,11 +96,23 @@ function update() {
         }
     }
 
+    if (gameObject.player.x < 0) {
+        gameObject.player.x = gameConstants.WIDTH
+    }
+
+    if (gameObject.player.x > gameConstants.WIDTH) {
+        gameObject.player.x = 0
+    }
+
     if (!gameObject.platforms.getChildren().find(e => e.y < (gameConstants.HEIGHT / gameConstants.NUMBER_OF_PLATFORMS) * 1.5)) {
-        console.log(gameObject.platforms.getChildren().map(e => e.y))
         const platform = Platform.createPlatform(0, gameConstants.WIDTH, (gameConstants.HEIGHT / gameConstants.NUMBER_OF_PLATFORMS) / 2)
 
-        gameObject.platforms.create(platform.position.x, platform.position.y, 'platformBlack')
+        gameObject.platforms.create(platform.position.x, platform.position.y, Math.random() > 0.5 ? 'platformBlack' : 'platformWhite')
+
+
+        if (Math.random() < gameConstants.CHANGER_SPAWN_RATE) {
+            gameObject.colorChangers.create(platform.position.x, platform.position.y - 10, 'colorChanger')
+        }
     }
 
 
