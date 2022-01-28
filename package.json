@@ -1,0 +1,22 @@
+{
+  "name": "divide",
+  "version": "1.0.0",
+  "description": "An unofficial participation game responding to the 2022 Global Game Jam subject \"Duality\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marchec/divide.git"
+  },
+  "author": "Claire Marche",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/marchec/divide/issues"
+  },
+  "homepage": "https://github.com/marchec/divide#readme",
+  "dependencies": {
+    "phaser": "^3.55.2"
+  }
+}
