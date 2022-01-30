@@ -90,6 +90,7 @@ function update() {
 
     if ((gameObject.player.body.onFloor() || gameObject.player.body.touching.down)) {
         gameObject.player.setVelocityY(-180)
+        gameObject.player.setCollideWorldBounds(false)
     }
 
     if (gameObject.player.y < gameConstants.HEIGHT / 2) {
