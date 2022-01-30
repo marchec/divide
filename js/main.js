@@ -88,7 +88,7 @@ function update() {
         gameObject.player.setVelocityX(0)
     }
 
-    if (gameObject.keys.space.isDown && (gameObject.player.body.onFloor() || gameObject.player.body.touching.down)) {
+    if ((gameObject.player.body.onFloor() || gameObject.player.body.touching.down)) {
         gameObject.player.setVelocityY(-180)
     }
 
