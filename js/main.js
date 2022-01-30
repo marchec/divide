@@ -98,7 +98,7 @@ function update() {
         gameObject.player.setCollideWorldBounds(false)
     }
 
-    if (gameObject.player.y < gameConstants.HEIGHT / 2) {
+    if (gameObject.player.y < 3 * gameConstants.HEIGHT / 4) {
         gameObject.platforms.incY(1)
         ++gameObject.floorHeight
 
