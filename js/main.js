@@ -6,7 +6,8 @@ const gameConstants = {
     HEIGHT: 600,
     WIDTH: 200,
     NUMBER_OF_PLATFORMS: 10,
-    CHANGER_SPAWN_RATE: 0.2
+    CHANGER_SPAWN_RATE: 0.2,
+    JUMP_HEIGHT: 160
 } 
 document.addEventListener("DOMContentLoaded", () => {
     var config = {
@@ -93,7 +94,7 @@ function update() {
     }
 
     if ((gameObject.player.body.onFloor() || gameObject.player.body.touching.down)) {
-        gameObject.player.setVelocityY(-180)
+        gameObject.player.setVelocityY(-gameConstants.JUMP_HEIGHT)
         gameObject.player.setCollideWorldBounds(false)
     }
 
