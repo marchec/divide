@@ -77,6 +77,10 @@ function create() {
     this.cameras.main.setSize(gameConstants.WIDTH, gameConstants.HEIGHT)
     this.cameras.add(gameConstants.WIDTH, 0, gameConstants.WIDTH, gameConstants.HEIGHT)
 
+    gameObject.score = 0
+    gameObject.floorHeight = 0
+
+    gameObject.scoreText = this.add.text(gameConstants.WIDTH - 50, 0, { fontSize: '32px' })
 }
 
 function update() {
@@ -95,6 +99,7 @@ function update() {
 
     if (gameObject.player.y < gameConstants.HEIGHT / 2) {
         gameObject.platforms.incY(1)
+        ++gameObject.floorHeight
 
         const disappearing = gameObject.platforms.getChildren().find(e => e.y > gameConstants.HEIGHT)
 
@@ -110,6 +115,14 @@ function update() {
     if (gameObject.player.x > gameConstants.WIDTH) {
         gameObject.player.x = 0
     }
+
+    const playerHeight = Math.floor(gameObject.floorHeight + (gameConstants.HEIGHT - gameObject.player.y))
+
+    if (playerHeight > gameObject.score) {
+        gameObject.score = playerHeight
+        gameObject.scoreText.setText(gameObject.score)
+    }
+
 
     if (!gameObject.platforms.getChildren().find(e => e.y < (gameConstants.HEIGHT / gameConstants.NUMBER_OF_PLATFORMS) * 1.5)) {
         const platform = Platform.createPlatform(0, gameConstants.WIDTH, (gameConstants.HEIGHT / gameConstants.NUMBER_OF_PLATFORMS) / 2)
