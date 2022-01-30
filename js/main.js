@@ -56,6 +56,12 @@ function create() {
 
     this.physics.add.collider(gameObject.colorChangers, gameObject.platforms)
 
+    gameObject.platforms.getChildren().forEach(child => {
+        child.body.checkCollision.left = false
+        child.body.checkCollision.down = false
+        child.body.checkCollision.right = false
+    })
+
     gameObject.player = this.physics.add.sprite(gameConstants.WIDTH / 2, gameConstants.HEIGHT - 10, 'playerBlack')
     gameObject.player.setCollideWorldBounds(true)
 
@@ -107,7 +113,11 @@ function update() {
     if (!gameObject.platforms.getChildren().find(e => e.y < (gameConstants.HEIGHT / gameConstants.NUMBER_OF_PLATFORMS) * 1.5)) {
         const platform = Platform.createPlatform(0, gameConstants.WIDTH, (gameConstants.HEIGHT / gameConstants.NUMBER_OF_PLATFORMS) / 2)
 
-        gameObject.platforms.create(platform.position.x, platform.position.y, Math.random() > 0.5 ? 'platformBlack' : 'platformWhite')
+        const newPlatform = gameObject.platforms.create(platform.position.x, platform.position.y, Math.random() > 0.5 ? 'platformBlack' : 'platformWhite')
+
+        newPlatform.body.checkCollision.down = false
+        newPlatform.body.checkCollision.left = false
+        newPlatform.body.checkCollision.right = false
 
 
         if (Math.random() < gameConstants.CHANGER_SPAWN_RATE) {
